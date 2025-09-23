@@ -401,7 +401,7 @@ final class JsonView(
       "score" -> rt.score,
       "players" -> rt.leaders.map: p =>
         Json.obj(
-          "user" -> lightUserApi.sync(p.userId),
+          "user" -> lightUserApi.syncFallback(p.userId),
           "score" -> p.score
         )
     )
@@ -445,8 +445,10 @@ final class JsonView(
                               .add("fire" -> p.fire)
                   )
 
-  def teamInfo(tour: Tournament, teamId: TeamId): Fu[Option[JsObject]] =
-    tour.isTeamBattle.optionFu(teamInfoCache.get(tour.id -> teamId))
+  def teamInfo(tour: Tournament, teamId: TeamId, joined: Boolean): Fu[Option[JsObject]] =
+    tour.isTeamBattle
+      .optionFu(teamInfoCache.get(tour.id -> teamId))
+      .map2(_.add("joined", joined))
 
   private[tournament] def commonTournamentJson(
       tour: Tournament,

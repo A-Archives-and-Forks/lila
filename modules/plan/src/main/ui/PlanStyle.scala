@@ -26,9 +26,7 @@ final class PlanStyle(helpers: Helpers):
             "pss__color--selectable" -> color.selectable(patron.tier)
           )
         )(
-          span(cls := "user-link online")(
-            iconTag(Icon.Wings)(cls := s"line patron ${color.cssClass}")
-          ),
+          span(cls := s"patron-icon--shiny patron-icon--shiny--${color.id}")(i),
           span(cls := "pss__color__tier-name")(tier.name)
         )
     ),
@@ -37,9 +35,9 @@ final class PlanStyle(helpers: Helpers):
         "Thank you ",
         userLink(me),
         " for supporting Lichess ",
-        if plan.lifetime then "as a lifetime Patron."
-        else frag("for ", strong(pluralize("month", plan.months)), ". "),
-        "You may choose one of the wing colors you unlocked."
+        if plan.lifetime then "as a lifetime Patron"
+        else frag("for ", strong(pluralize("month", plan.months))),
+        ". You may choose one of the wing colors you unlocked."
       )
     )
   )
